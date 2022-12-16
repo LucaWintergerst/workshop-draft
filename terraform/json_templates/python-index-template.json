@@ -1,0 +1,42 @@
+{
+  "priority": 200,
+  "template": {
+    "settings": {
+      "index": {
+        "default_pipeline": "logs-log.log-1.1.0"
+      }
+    },
+    "mappings": {
+      "_meta": {
+        "package": {
+          "name": "log"
+        },
+        "managed_by": "fleet",
+        "managed": true
+      },
+      "properties": {
+        "client.ip": {
+          "type": "ip"
+        }
+      }
+    }
+  },
+  "index_patterns": [
+    "logs-python-default"
+  ],
+  "data_stream": {
+    "hidden": false,
+    "allow_custom_routing": false
+  },
+  "composed_of": [
+    "logs-log.log@package",
+    "logs-log.log@custom",
+    ".fleet_globals-1",
+    ".fleet_agent_id_verification-1"
+  ],
+  "_meta": {
+    "package": {
+      "name": "log"
+    }
+  }
+}

@@ -1,0 +1,12 @@
+{
+    "processors": [
+      {
+        "set": {
+          "field": "service.name",
+          "ignore_empty_value": true,
+          "ignore_failure": true,
+          "copy_from": "aws.dimensions.FunctionName"
+        }
+      }
+    ]
+  }

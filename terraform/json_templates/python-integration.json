@@ -1,0 +1,29 @@
+{
+  "package": {
+    "name": "log",
+    "version": "1.1.0",
+    "experimental_data_stream_features": []
+  },
+  "name": "python-log",
+  "namespace": "default",
+  "description": "",
+  "policy_id": "${policy_id}",
+  "inputs": {
+    "logs-logfile": {
+      "enabled": true,
+      "streams": {
+        "log.log": {
+          "enabled": true,
+          "vars": {
+            "paths": [
+              "/tmp/service1.log"
+            ],
+            "data_stream.dataset": "python",
+            "custom": "",
+            "tags": []
+          }
+        }
+      }
+    }
+  }
+}

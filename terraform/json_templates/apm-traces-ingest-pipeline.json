@@ -1,0 +1,18 @@
+{
+    "processors": [
+      {
+        "set": {
+          "field": "last_pipeline",
+          "value": "traces-apm@custom"
+        }
+      },
+      {
+        "set": {
+          "field": "labels.gotcha",
+          "value": "Congrats, you've found the issue. Execute XYZ to fix it!",
+          "if": "ctx.labels?.enrichment == 'true'",
+          "ignore_failure": true
+        }
+      }
+    ]
+  }
