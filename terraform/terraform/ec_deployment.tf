@@ -126,7 +126,7 @@ data "external" "elastic_upload_saved_objects" {
     kibana_endpoint  = ec_deployment.elastic_deployment.kibana[0].https_endpoint
     elastic_username  = ec_deployment.elastic_deployment.elasticsearch_username
     elastic_password  = ec_deployment.elastic_deployment.elasticsearch_password
-    so_file      		= "${path.module}/../dashboards/AWS-extension.ndjson"
+    so_file      		= "${path.module}/../dashboards/workshop.ndjson"
   }
   program = ["sh", "${path.module}/../lib/elastic_api/kb_upload_saved_objects.sh" ]
   depends_on = [ec_deployment.elastic_deployment]

@@ -56,12 +56,25 @@ rm elastic-agent-$ES_VERSION-linux-x86_64.tar.gz
 ## install workshop app
 #########
 
-echo "Install workshop app"
+echo "Clone repo"
 cd "/home/ubuntu"
-
-sudo apt-get --assume-yes install python3-pip
-
 git clone "https://github.com/LucaWintergerst/workshop-draft.git"
+
+echo "Install lambda function"
+cd "/home/ubuntu"
+sudo apt-get --assume-yes install npm
+cd "workshop-draft/aws-lambda/lambda-application"
+npm install -g serverless
+npm install --save-dev
+
+jq --arg region "${aws_region}" --arg serverurl "${integration_server_endpoint}" --arg servertoken "${apm_secret_token}" '{"aws-region":"$aws_region", "apm-server-url":"$serverurl", "apm-server-token":"$servertoken"}' > env.json
+serverless config credentials --profile pme  --provider aws  --key ${aws_access_key_id}  --secret ${aws_secret_access_key}
+
+serverless deploy --aws-profile pme > lambda-urls.txt
+
+echo "Install python app"
+cd "/home/ubuntu"
+sudo apt-get --assume-yes install python3-pip
 
 cd "workshop-draft/python-app"
 pip install boto3 flask python-dotenv ecs_logging structlog cachetools elastic-apm
@@ -74,6 +87,6 @@ echo SERVICE_NAME="python-app-v1" >> .env
 echo aws_lambda_url="httpss://qh2foquvt2.execute-api.eu-west-2.amazonaws.com/dev/ping"  >> .env
 
 echo "Start workshop app"
-python3 app.py &
+python3 app1.py &
 sleep 5
 python3 loadgen.py &
