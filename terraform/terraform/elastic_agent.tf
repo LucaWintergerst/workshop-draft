@@ -13,6 +13,7 @@ data "template_file" "install_agent" {
     aws_access_key_id = var.aws_access_key
     aws_secret_access_key = var.aws_secret_key
     apm_secret_token = ec_deployment.elastic_deployment.apm_secret_token
+    aws_region = var.aws_region
     policy_id = data.external.elastic_create_policy.result.id
   }
 }
