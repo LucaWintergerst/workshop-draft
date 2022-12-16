@@ -1,0 +1,28 @@
+{
+  "processors": [
+    {
+      "json": {
+        "field": "message",
+        "add_to_root": true
+      }
+    },
+    {
+      "set": {
+        "field": "event.dataset2",
+        "ignore_empty_value": true,
+        "copy_from": "event.dataset"
+      }
+    },
+    {
+      "set": {
+        "field": "event.dataset",
+        "value": "aws.cloudwatch_logs"
+      }
+    }
+  ],
+  "on_failure": [
+    {
+      "drop": {}
+    }
+  ]
+}

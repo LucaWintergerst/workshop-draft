@@ -111,6 +111,7 @@ def endpoint1():
             except KeyError:
               logger.info("not found in cache, fetching enrichment info")
               elasticapm.label(enrichment=True)
+              load_dotenv(override=True)
               metadata = requests.get(os.environ["aws_lambda_url"]).json()['message']
               logger.info(metadata)
               cache[req.get("id")] = metadata
