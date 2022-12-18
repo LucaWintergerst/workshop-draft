@@ -58,7 +58,7 @@ rm elastic-agent-$ES_VERSION-linux-x86_64.tar.gz
 
 echo "Clone repo"
 cd "/home/ubuntu"
-git clone "https://github.com/LucaWintergerst/workshop-draft.git"
+git clone --recurse-submodules "https://github.com/LucaWintergerst/workshop-draft.git"
 
 echo "Install lambda function"
 cd "/home/ubuntu"
