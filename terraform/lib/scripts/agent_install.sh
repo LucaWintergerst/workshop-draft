@@ -62,18 +62,18 @@ rm elastic-agent-$ES_VERSION-linux-x86_64.tar.gz
 sudo apt-get --assume-yes install npm
 sudo apt-get --assume-yes install python3-pip
 
+echo "Clone repo"
+cd "/home/ubuntu"
+git clone --recurse-submodules "https://github.com/LucaWintergerst/workshop-draft.git"
+chmod 777 /home/ubuntu/workshop-draft/python-app/fixPerformanceIssue.sh
+
+echo "Install lambda function"
+cd "/home/ubuntu/workshop-draft/aws-lambda/lambda-application"
 npm install -g n
 npm install -g serverless
 npm install --save-dev
 n stable
 hash -r
-
-echo "Clone repo"
-cd "/home/ubuntu"
-git clone --recurse-submodules "https://github.com/LucaWintergerst/workshop-draft.git"
-
-echo "Install lambda function"
-cd "/home/ubuntu/workshop-draft/aws-lambda/lambda-application"
 
 jq -n --arg aws-region "${aws_region}" --arg apm-server-url "${integration_server_endpoint}" --arg apm-server-token "${apm_secret_token}" '$ARGS.named' > ../env.json
 serverless config credentials --profile pme --provider aws --key ${aws_access_key_id} --secret ${aws_secret_access_key}
