@@ -102,7 +102,7 @@ def endpoint1():
         metadata = None 
         if (random.random() > 0.5):
           if not ("metadata" in item):
-            logger.info("item %s needs enrichment", request.args.get('item'))
+            logger.info("item %s needs enrichment", item)
             elasticapm.label(enrichment=True)
             load_dotenv(override=True)
             metadata = requests.get(os.environ["aws_lambda_url"]).json()['message']
