@@ -100,13 +100,14 @@ def endpoint1():
     if ("item" in req):
         item = req.get("item")
         metadata = None 
-        if not ("metadata" in item):
-          logger.info("item %s needs enrichment", request.args.get('item'))
-          elasticapm.label(enrichment=True)
-          load_dotenv(override=True)
-          metadata = requests.get(os.environ["aws_lambda_url"]).json()['message']
-        else: 
-          metadata = req.get("item").get("metadata")
+        if (random.random() > 0.5):
+          if not ("metadata" in item):
+            logger.info("item %s needs enrichment", request.args.get('item'))
+            elasticapm.label(enrichment=True)
+            load_dotenv(override=True)
+            metadata = requests.get(os.environ["aws_lambda_url"]).json()['message']
+          else: 
+            metadata = req.get("item").get("metadata")
         dyanmoItem = {
           'id': {'S': str(req.get("id")), },
           'item': {'S': req.get("item").get("name"), },
