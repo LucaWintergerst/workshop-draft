@@ -59,20 +59,21 @@ rm elastic-agent-$ES_VERSION-linux-x86_64.tar.gz
 ## install workshop app
 #########
 
-echo "Clone repo"
-cd "/home/ubuntu"
-git clone --recurse-submodules "https://github.com/LucaWintergerst/workshop-draft.git"
-
-echo "Install lambda function"
-cd "/home/ubuntu"
 sudo apt-get --assume-yes install npm
+sudo apt-get --assume-yes install python3-pip
 
-cd "workshop-draft/aws-lambda/lambda-application"
 npm install -g n
 npm install -g serverless
 npm install --save-dev
 n stable
 hash -r
+
+echo "Clone repo"
+cd "/home/ubuntu"
+git clone --recurse-submodules "https://github.com/LucaWintergerst/workshop-draft.git"
+
+echo "Install lambda function"
+cd "/home/ubuntu/workshop-draft/aws-lambda/lambda-application"
 
 jq -n --arg aws-region "${aws_region}" --arg apm-server-url "${integration_server_endpoint}" --arg apm-server-token "${apm_secret_token}" '$ARGS.named' > ../env.json
 serverless config credentials --profile pme --provider aws --key ${aws_access_key_id} --secret ${aws_secret_access_key}
@@ -86,10 +87,8 @@ pip install -r requirements.txt
 python3 generate.py &
 
 echo "Install python app"
-cd "/home/ubuntu"
-sudo apt-get --assume-yes install python3-pip
+cd "/home/ubuntu/workshop-draft/python-app"
 
-cd "workshop-draft/python-app"
 pip install boto3 flask python-dotenv ecs_logging structlog cachetools elastic-apm
 
 echo aws_access_key_id=${aws_access_key_id} >> .env
