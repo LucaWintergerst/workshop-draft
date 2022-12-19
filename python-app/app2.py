@@ -105,7 +105,7 @@ def endpoint1():
         item = req.get("item")
         metadata = None 
         if not ("metadata" in item):
-          logger.info("item %s needs enrichment", request.args.get('item'))
+          logger.info("item %s needs enrichment", item)
           try:
             metadata = cache[req.get("id")]
           except KeyError:
