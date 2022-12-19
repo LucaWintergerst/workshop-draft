@@ -1,0 +1,6 @@
+service.name,type,connected_to,connected_via,process
+python-app,1) Python,,BASH,apm services
+api gateway,2) Service,python-app,REST,apm services
+sample-app-dev-consumer,3) Lambda,api gateway,TRIGGER,apm services
+sample-app-dev-producer,3) Lambda,api gateway,TRIGGER,apm services
+dynamodb,2) Service,python-app,QUERY,apm services
