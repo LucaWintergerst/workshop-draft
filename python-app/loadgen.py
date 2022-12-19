@@ -27,6 +27,7 @@ while True:
         print("spike starting")
         n = 0
         headers = {'X-Real-IP': "213.30.114.42"}
+        data = {"item": { "name": "hack0r", "id": n }}
         for x in range(100):
             response = requests.post("http://localhost:5002/add-item", json=data, headers=headers)
         print("spike done")
