@@ -102,10 +102,15 @@ def endpoint1():
         metadata = None 
         if (random.random() > 0.5):
           if not ("metadata" in item):
-            logger.info("item %s needs enrichment", item)
-            elasticapm.label(enrichment=True)
+            logger.info("item %s needs enrichment", item)            
             load_dotenv(override=True)
-            metadata = requests.get(os.environ["aws_lambda_url"]).json()['message']
+            try:
+              metadata = requests.get(os.environ["aws_lambda_url"]).json()['message']
+            except:
+              logger.error("The lambda function defined in the .env file within the app directory seems to be wrong. Change it!")  
+            else:
+              #We add the enrichment label only if the enrichment was successful.
+              elasticapm.label(enrichment=True)
           else: 
             metadata = req.get("item").get("metadata")
         dyanmoItem = {

@@ -6,6 +6,7 @@ data "template_file" "install_agent" {
   template = file("../lib/scripts/agent_install.sh")
   vars = {
     elastic_version = var.elastic_version
+    elastic_cloud_id = ec_deployment.elastic_deployment.elasticsearch[0].cloud_id
     elasticsearch_username = ec_deployment.elastic_deployment.elasticsearch_username
     elasticsearch_password = ec_deployment.elastic_deployment.elasticsearch_password
     kibana_endpoint = ec_deployment.elastic_deployment.kibana[0].https_endpoint

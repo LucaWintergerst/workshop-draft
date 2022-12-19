@@ -76,13 +76,13 @@ def process():
         if date.hour > 12:
             metric = metric*2 + (metric * math.sin(((24 - date.hour) * 60  - (date.minute)) / 360 *math.pi/2) * -1) * multi / 4
             metric = metric * random.uniform(0.75,1.25)
-        if date> (datetime.today()  - relativedelta(months=1)) and date < (datetime.today()  - relativedelta(months=1) + relativedelta(minutes=50)) and function == "function2":
+        if date> (datetime.today()  - relativedelta(months=1)) and date < (datetime.today()  - relativedelta(months=1) + relativedelta(minutes=50)) and function == "sample-app-dev-consumer":
         #if date.day == 1 and date.month == 12 and (date.hour == 7) and date.minute > 10 and function == "function2":
         #1.003
             metric = metric * math.pow(2 - 0.902, counter)
             counter = counter + 2
         doc = {
-            '_index': 'metrics-aws.lambda-default-history',
+            '_index': 'lambda-1',
             '_id': hashlib.md5(date.isoformat().encode()).hexdigest() + function,
             '@timestamp': date.isoformat(),
             "aws": {
@@ -695,8 +695,8 @@ createBody = {
     }
 }
 try:
-  es.indices.create(index='metrics-aws.lambda-default-history',body=createBody)
-  ## es.indices.put_alias(index='lambda-1', name='metrics-lambda')
+  es.indices.create(index='lambda-1',body=createBody)
+  es.indices.put_alias(index='lambda-1', name='metrics-lambda')
 except Exception as e:
   print(e)
 
