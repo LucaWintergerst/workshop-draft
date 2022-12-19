@@ -1,0 +1,49 @@
+{
+    "processors": [
+      {
+        "set": {
+          "field": "event.original",
+          "copy_from": "message"
+        }
+      },
+      {
+        "json": {
+          "field": "message",
+          "add_to_root": true,
+          "ignore_failure": true
+        }
+      },
+      {
+        "set": {
+          "field": "message",
+          "ignore_empty_value": true,
+          "ignore_failure": true,
+          "copy_from": "parsed.message"
+        }
+      },
+      {
+        "set": {
+          "field": "log.level",
+          "ignore_empty_value": true,
+          "ignore_failure": true,
+          "copy_from": "parsed.log.level"
+        }
+      },
+      {
+        "set": {
+          "field": "transcation.id",
+          "ignore_empty_value": true,
+          "ignore_failure": true,
+          "copy_from": "parsed.transaction.id"
+        }
+      },
+      {
+        "set": {
+          "field": "trace.id",
+          "ignore_empty_value": true,
+          "ignore_failure": true,
+          "copy_from": "parsed.trace.id"
+        }
+      }
+    ]
+  }
