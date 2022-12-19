@@ -13,7 +13,10 @@ from datetime import datetime
 from dateutil.relativedelta import relativedelta
 
 #date_rng = pd.date_range(start="10/19/2022", end=datetime.today().strftime('%m/%d/%Y').replace("/0", "/"), freq='5min')
-date_rng = pd.date_range(start="10/19/2022", end="12/19/2022", freq='5min')
+date_rng = pd.date_range(
+    start=(datetime.today()  - relativedelta(months=3)).strftime('%m/%d/%Y').replace("/0", "/"), 
+    end=(datetime.today()).strftime('%m/%d/%Y').replace("/0", "/"), 
+    freq='5min')
 
 
 load_dotenv()
@@ -73,7 +76,8 @@ def process():
         if date.hour > 12:
             metric = metric*2 + (metric * math.sin(((24 - date.hour) * 60  - (date.minute)) / 360 *math.pi/2) * -1) * multi / 4
             metric = metric * random.uniform(0.75,1.25)
-        if date.day == 1 and date.month == 12 and (date.hour == 7) and date.minute > 10 and function == "function2":
+        if date> (datetime.today()  - relativedelta(months=1)) and date < (datetime.today()  - relativedelta(months=1) + relativedelta(minutes=50)) and function == "function2":
+        #if date.day == 1 and date.month == 12 and (date.hour == 7) and date.minute > 10 and function == "function2":
         #1.003
             metric = metric * math.pow(2 - 0.902, counter)
             counter = counter + 2
