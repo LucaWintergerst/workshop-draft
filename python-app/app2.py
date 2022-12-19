@@ -18,6 +18,10 @@ load_dotenv()
 
 from collections import deque
 
+from cachetools import TTLCache
+
+cache = TTLCache(maxsize=10, ttl=10)
+
 # disable the default flask logger
 logger = logging.getLogger('werkzeug')
 logger.setLevel(logging.DEBUG)
@@ -102,9 +106,14 @@ def endpoint1():
         metadata = None 
         if not ("metadata" in item):
           logger.info("Metadata missing, needs enrichment")
-          elasticapm.label(enrichment=True)
-          load_dotenv(override=True)
-          metadata = requests.get(os.environ["aws_lambda_url"]).json()['message']
+          try:
+            metadata = cache[req.get("id")]
+          except KeyError:
+            logger.info("not found in cache, fetching enrichment info")
+            elasticapm.label(enrichment=True)
+            load_dotenv(override=True)
+            metadata = requests.get(os.environ["aws_lambda_url"]).json()['message']
+            cache[req.get("id")] = metadata
         else: 
           metadata = req.get("item").get("metadata")
         dyanmoItem = {
