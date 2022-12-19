@@ -27,10 +27,10 @@ def process():
   counter = 1
 
   metricRand = {
-        'function1': 1.75,
-        'function2': 1.15,
-        'function3': 3.2,
-        'function4': 0.9
+        'sample-app-dev-consumer': 1.75,
+        'sample-app-dev-producer': 1.15,
+        'other-function3': 3.2,
+        'other-function4': 0.9
   }
 
   for date in date_rng:
@@ -68,7 +68,7 @@ def process():
 
     metricOriginal = metric
 
-    for function in ["function1", "function2", "function3", "function4"]:
+    for function in ["sample-app-dev-consumer", "sample-app-dev-producer", "other-function3", "other-function4"]:
         #add anomaly for specific day
         metric = metricOriginal * metricRand[function]
         if date.hour <= 12:
@@ -82,7 +82,7 @@ def process():
             metric = metric * math.pow(2 - 0.902, counter)
             counter = counter + 2
         doc = {
-            '_index': 'lambda-1',
+            '_index': 'metrics-aws.lambda-default-history',
             '_id': hashlib.md5(date.isoformat().encode()).hexdigest() + function,
             '@timestamp': date.isoformat(),
             "aws": {
@@ -135,8 +135,8 @@ def process():
 
 
 es = Elasticsearch(
-    cloud_id= os.environ["cloud_id"], 
-    basic_auth=(os.environ["username"], os.environ["password"])
+    cloud_id= os.environ["CLOUD_ID"], 
+    basic_auth=(os.environ["USERNAME"], os.environ["PASSWORD"])
     )
 
 cnt = 0
@@ -695,8 +695,8 @@ createBody = {
     }
 }
 try:
-  es.indices.create(index='lambda-1',body=createBody)
-  es.indices.put_alias(index='lambda-1', name='metrics-lambda')
+  es.indices.create(index='metrics-aws.lambda-default-history',body=createBody)
+  ## es.indices.put_alias(index='lambda-1', name='metrics-lambda')
 except Exception as e:
   print(e)
 

@@ -6,6 +6,9 @@
 
 export ES_VERSION=${elastic_version}
 export CLOUD_AUTH=${elasticsearch_username}:${elasticsearch_password}
+export CLOUD_ID=${elastic_cloud_id}
+export USERNAME=${elasticsearch_username}
+export PASSWORD=${elasticsearch_password}
 export KIBANA_URL=${kibana_endpoint}
 export APM_SERVER_URL=${integration_server_endpoint}
 integration_server_endpoint=${integration_server_endpoint}
