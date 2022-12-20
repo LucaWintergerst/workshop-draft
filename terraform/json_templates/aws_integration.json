@@ -1768,10 +1768,10 @@
       {
         "type": "httpjson",
         "policy_template": "securityhub",
-        "enabled": true,
+        "enabled": false,
         "streams": [
           {
-            "enabled": true,
+            "enabled": false,
             "data_stream": {
               "type": "logs",
               "dataset": "aws.securityhub_findings"
@@ -1818,7 +1818,7 @@
             "id": "httpjson-aws.securityhub_findings-6ed9ee36-5623-4ddc-b5b9-96ef1a132c54"
           },
           {
-            "enabled": true,
+            "enabled": false,
             "data_stream": {
               "type": "logs",
               "dataset": "aws.securityhub_insights"
