@@ -1,0 +1,56 @@
+{
+  "source": {
+    "index": [
+      "traces-apm*",
+      "apm-*",
+      "logs-apm*",
+      "apm-*",
+      "metrics-apm*",
+      "apm-*"
+    ]
+  },
+  "pivot": {
+    "group_by": {
+      "service.name": {
+        "terms": {
+          "field": "service.name"
+        }
+      }
+    },
+    "aggregations": {
+      "unique_tx": {
+        "cardinality": {
+          "field": "transaction.id"
+        }
+      },
+      "total_tx": {
+        "value_count": {
+          "field": "transaction.id"
+        }
+      },
+      "duration.percentiles": {
+        "percentiles": {
+          "field": "transaction.duration.us",
+          "percents": [
+            50,
+            75,
+            95
+          ]
+        }
+      },
+      "total_errors": {
+        "cardinality": {
+          "field": "error.id"
+        }
+      }
+    }
+  },
+  "dest": {
+    "index": "service-status"
+  },
+  "sync": {
+    "time": {
+      "field": "@timestamp"
+    }
+  }
+}

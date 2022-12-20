@@ -103,7 +103,7 @@ def endpoint1():
     dyanmoItem = None
     if ("item" in req):
         item = req.get("item")
-        metadata = None 
+        metadata = "" 
         if not ("metadata" in item):
           logger.info("item %s needs enrichment", item)
           try:
