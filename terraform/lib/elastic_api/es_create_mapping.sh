@@ -7,7 +7,7 @@ eval "$(jq -r '@sh "ELASTIC_HTTP_METHOD=\(.elastic_http_method) ELASTIC_ENDPOINT
 #   ${ELASTIC_ENDPOINT}/${ELASTIC_INDEX_NAME})
 
 # Define mapping
-output=$(curl -s -X ${ELASTIC_HTTP_METHOD} -u "$ELASTIC_USERNAME:$ELASTIC_PASSWORD" \
+output=$(curl -s -X PUT -u "$ELASTIC_USERNAME:$ELASTIC_PASSWORD" \
    -H 'Content-Type:application/json' -d "$ELASTIC_JSON_BODY" \
    ${ELASTIC_ENDPOINT}/${ELASTIC_INDEX_NAME} | jq '.')
 

@@ -1,0 +1,10 @@
+{"index":{}}
+{"process":"apm services","type":"1) Python","connected_via":"BASH","service":{"name":"python-app"}}
+{"index":{}}
+{"process":"apm services","connected_to":"python-app","type":"2) Service","connected_via":"REST","service":{"name":"api gateway"}}
+{"index":{}}
+{"process":"apm services","connected_to":"api gateway","type":"3) Lambda","connected_via":"TRIGGER","service":{"name":"sample-app-dev-consumer"}}
+{"index":{}}
+{"process":"apm services","connected_to":"api gateway","type":"3) Lambda","connected_via":"TRIGGER","service":{"name":"sample-app-dev-producer"}}
+{"index":{}}
+{"process":"apm services","connected_to":"python-app","type":"2) Service","connected_via":"QUERY","service":{"name":"dynamodb"}}

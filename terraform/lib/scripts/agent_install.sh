@@ -65,7 +65,6 @@ sudo apt-get --assume-yes install python3-pip
 echo "Clone repo"
 cd "/home/ubuntu"
 git clone --recurse-submodules "https://github.com/LucaWintergerst/workshop-draft.git"
-chmod 777 /home/ubuntu/workshop-draft/python-app/fixPerformanceIssue.sh
 
 echo "Install lambda function"
 cd "/home/ubuntu/workshop-draft/aws-lambda/lambda-application"
@@ -97,6 +96,9 @@ echo SERVER_URL=${integration_server_endpoint} >> .env
 echo SECRET_TOKEN=${apm_secret_token} >> .env
 echo SERVICE_NAME="python-app" >> .env
 echo aws_lambda_url="httpss$${lambda_url}"  >> .env
+
+chown ubuntu /home/ubuntu/workshop-draft/* -R
+chmod 777 /home/ubuntu/workshop-draft/python-app/fixPerformanceIssue.sh 
 
 echo "Start workshop app"
 python3 app1.py &

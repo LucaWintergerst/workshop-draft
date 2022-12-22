@@ -1,22 +1,28 @@
 {
   "processors": [
     {
-      "json": {
-        "field": "message",
-        "add_to_root": true
-      }
-    },
-    {
-      "set": {
-        "field": "event.dataset2",
-        "ignore_empty_value": true,
-        "copy_from": "event.dataset"
-      }
-    },
-    {
       "set": {
         "field": "event.dataset",
         "value": "aws.cloudwatch_logs"
+      }
+    },
+    {
+      "json": {
+        "field": "message",
+        "target_field": "parsed"
+      }
+    },
+    {
+      "set": {
+        "field": "log.level",
+        "ignore_empty_value": true,
+        "copy_from": "parsed.log.level"
+      }
+    },
+    {
+      "set": {
+        "field": "message",
+        "value": "parsed.message"
       }
     }
   ],
