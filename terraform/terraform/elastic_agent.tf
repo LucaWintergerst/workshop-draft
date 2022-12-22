@@ -87,7 +87,6 @@ resource "aws_instance" "elastic-agent" {
   associate_public_ip_address = true
   security_groups = [ aws_security_group.elastic-agent.name ]
   monitoring = true
-  key_name = "felix-frankfurt"
 
   tags = {
     Name = "elastic-agent"
@@ -98,4 +97,9 @@ resource "aws_instance" "elastic-agent" {
   }
 
   user_data = "${data.template_file.install_agent.rendered}"
+
+  depends_on = [
+    ec_deployment.elastic_deployment,
+    data.external.elastic_index_template
+  ]
 }

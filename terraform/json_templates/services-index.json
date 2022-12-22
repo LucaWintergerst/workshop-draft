@@ -1,0 +1,1 @@
+{"mappings":{"properties":{"connected_to":{"type":"keyword"},"connected_via":{"type":"keyword"},"process":{"type":"keyword"},"service":{"properties":{"name":{"type":"keyword"}}},"type":{"type":"keyword"}}}}
