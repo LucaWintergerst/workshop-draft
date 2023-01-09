@@ -1,0 +1,152 @@
+---
+AWSTemplateFormatVersion: '2010-09-09'
+
+Parameters:
+  ElasticCloudApiKey:
+    Type: String
+    Description: Enter the Elastic Cloud API Key. You can get it via https://ela.st/cloud-key using the credentials you've created in step 1 of the Elastic Cloud Marketplace setup
+  InstanceType:
+    Type: String
+    Default: t2.micro
+    AllowedValues:
+      - t2.micro
+      - t2.small
+      - t2.medium
+    Description: EC2 instance type
+  Region:
+    Type: String
+    Default: us-east-1
+    AllowedValues:
+    - af-south-1
+    - ap-east-1
+    - ap-northeast-1
+    - ap-northeast-2
+    - ap-south-1
+    - ap-southeast-1
+    - ap-southeast-2
+    - eu-central-1
+    - eu-south-1
+    - eu-west-1
+    - eu-west-2
+    - eu-west-3
+    - me-south-1
+    - sa-east-1
+    - us-east-1
+    - us-east-2
+    - us-west-1
+    - us-west-2
+    - ca-central-1
+    Description: Enter us-east-1 or other regions from list. Default is us-east-1.
+
+Mappings:
+  AWSAMIRegionMap:
+    af-south-1:
+      US2004HVM: ami-022666956ad401a1
+    ap-northeast-1:
+      US2004HVM: ami-015f1a68ce825a8d2
+    ap-northeast-2:
+      US2004HVM: ami-0be9734c9e68b99f4
+    ap-northeast-3:
+      US2004HVM: ami-01cb3e73f8ef13fdc
+    ap-south-1:
+      US2004HVM: ami-00aaac1f2ef4ce965
+    ap-southeast-1:
+      US2004HVM: ami-0012ffabeb7413479
+    ap-southeast-2:
+      US2004HVM: ami-03ec1fe05b3849c74
+    ca-central-1:
+      US2004HVM: ami-04c56d394d31cdeac
+    eu-central-1:
+      US2004HVM: ami-0980c5102b5ef10cc
+    me-south-1:
+      US2004HVM: ami-03cc0b5db8321f2e5
+    ap-east-1:
+      US2004HVM: ami-0c7e5903bee96ef81
+    eu-north-1:
+      US2004HVM: ami-0663a4867a210287a
+    eu-south-1:
+      US2004HVM: ami-035e213233577516f
+    eu-west-1:
+      US2004HVM: ami-0213344887e47003a
+    eu-west-2:
+      US2004HVM: ami-0add0a5a0cf9afc6c
+    eu-west-3:
+      US2004HVM: ami-01019e7343a5f361d
+    sa-east-1:
+      US2004HVM: ami-0312c74c38dc7bae6
+    us-east-1:
+      US2004HVM: ami-0db6c6238a40c0681
+    us-east-2:
+      US2004HVM: ami-03b6c8bd55e00d5ed
+    us-west-1:
+      US2004HVM: ami-0f5868930cb63c89c
+    us-west-2:
+      US2004HVM: ami-038a0ccaaedae6406
+
+Resources:
+  IAMUser:
+    Type: AWS::IAM::User
+    Properties:
+      Policies:
+        - PolicyName: TerraformAccess
+          PolicyDocument:
+            Version: '2012-10-17'
+            Statement:
+              - Effect: Allow
+                Action:
+                  - '*'
+                Resource: '*'
+
+  AccessKey:
+    Type: AWS::IAM::AccessKey
+    Properties:
+      UserName: !Ref IAMUser
+
+  SecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupName: "elastic-ssh-security-group"
+      GroupDescription: Security group for Terraform EC2 instance
+      SecurityGroupIngress:
+        - IpProtocol: tcp
+          FromPort: 22
+          ToPort: 22
+          CidrIp: 0.0.0.0/0
+  
+  EC2Instance:
+    Type: 'AWS::EC2::Instance'
+    Properties:
+      ImageId: !FindInMap
+          - AWSAMIRegionMap
+          - !Ref 'AWS::Region'
+          - 'US2004HVM'
+      InstanceType: !Ref InstanceType
+      SecurityGroupIds:
+        - !Ref SecurityGroup
+      UserData:
+        'Fn::Base64': !Sub |
+          #!/bin/bash
+
+          wget -O- https://apt.releases.hashicorp.com/gpg | gpg --dearmor | sudo tee /usr/share/keyrings/hashicorp-archive-keyring.gpg
+          echo "deb [signed-by=/usr/share/keyrings/hashicorp-archive-keyring.gpg] https://apt.releases.hashicorp.com $(lsb_release -cs) main" | sudo tee /etc/apt/sources.list.d/hashicorp.list
+          
+          sudo apt-get update
+          sudo apt-get --assume-yes install terraform
+          sudo apt-get --assume-yes install jq
+          sudo apt-get --assume-yes install unzip
+          sudo apt-get --assume-yes install awscli
+          
+          cd "/home/ubuntu"
+          git clone --recurse-submodules "https://github.com/LucaWintergerst/workshop-draft.git"
+          
+          cd "/home/ubuntu/workshop-draft/terraform/"
+          mkdir local_env
+          cd local_env
+          jq -n --arg aws_access_key "${AccessKey}" --arg aws_secret_key "${AccessKey.SecretAccessKey}" --arg aws_region "${Region}" --arg elastic_region "aws-${Region}" '$ARGS.named' > env.json
+          
+          export EC_API_KEY=${ElasticCloudApiKey}
+          cd "/home/ubuntu/workshop-draft/terraform/terraform"
+          terraform init
+          terraform apply -var-file="../local_env/env.json" -auto-approve
+    DependsOn:
+      - AccessKey
