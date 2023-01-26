@@ -142,11 +142,12 @@ Resources:
           cd "/home/ubuntu/workshop-draft/terraform/"
           mkdir local_env
           cd local_env
-          jq -n --arg aws_access_key "${AccessKey}" --arg aws_secret_key "${AccessKey.SecretAccessKey}" --arg aws_region "${Region}" --arg elastic_region "aws-${Region}" '$ARGS.named' > env.json
+          jq -n --arg aws_access_key "${AccessKey}" --arg aws_secret_key "${AccessKey.SecretAccessKey}" --arg aws_region "${Region}" --arg elastic_region "${Region}" '$ARGS.named' > env.json
           
           export EC_API_KEY=${ElasticCloudApiKey}
           cd "/home/ubuntu/workshop-draft/terraform/terraform"
-          terraform init
-          terraform apply -var-file="../local_env/env.json" -auto-approve
+          terraform init -backend-config="access_key=${AccessKey}" -backend-config="secret_key=${AccessKey.SecretAccessKey}"
+          EC_API_KEY=${ElasticCloudApiKey} terraform import -var-file="../local_env/env.json" aws_iam_role.vpcflow vpcflow_writer
+          EC_API_KEY=${ElasticCloudApiKey} terraform apply -var-file="../local_env/env.json" -auto-approve
     DependsOn:
       - AccessKey
