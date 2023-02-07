@@ -3,12 +3,12 @@
 # -------------------------------------------------------------
 data "ec_stack" "latest" {
   version_regex = "latest"
-  region        = var.elastic_region
+  region        = var.mapped_elastic_region[var.elastic_region]
 }
 
 resource "ec_deployment" "elastic_deployment" {
   name                    = var.elastic_deployment_name
-  region                  = var.elastic_region
+  region                  = var.mapped_elastic_region[var.elastic_region]
   version                 = var.elastic_version == "latest" ? data.ec_stack.latest.version : var.elastic_version
   deployment_template_id  = var.elastic_deployment_template_id
   elasticsearch {
