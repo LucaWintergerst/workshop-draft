@@ -18,7 +18,7 @@ variable "elastic_deployment_name" {
 
 variable "elastic_deployment_template_id" {
   type = string
-  default = "aws-general-purpose-arm-v5"
+  default = "aws-general-purpose"
 }
 
 # -------------------------------------------------------------
