@@ -16,8 +16,7 @@
           "enabled": true,
           "vars": {
             "paths": [
-              "/tmp/service1.log",
-              "/var/log/*"
+              "/tmp/service1.log"
             ],
             "data_stream.dataset": "python",
             "custom": "",

@@ -116,7 +116,9 @@ data "external" "elastic_add_python_integration" {
     )
   }
   program = ["sh", "${path.module}/../lib/elastic_api/kb_add_integration_to_policy.sh" ]
-  depends_on = [data.external.elastic_create_policy]
+  depends_on = [
+    data.external.elastic_create_policy
+  ]
 }
 
 # -------------------------------------------------------------
@@ -153,7 +155,7 @@ data "external" "elastic_upload_saved_objects" {
     kibana_endpoint  = ec_deployment.elastic_deployment.kibana[0].https_endpoint
     elastic_username  = ec_deployment.elastic_deployment.elasticsearch_username
     elastic_password  = ec_deployment.elastic_deployment.elasticsearch_password
-    so_file      		= "${path.module}/../dashboards/workshop2.ndjson"
+    so_file      		= "${path.module}/../dashboards/workshop3.ndjson"
   }
   program = ["sh", "${path.module}/../lib/elastic_api/kb_upload_saved_objects.sh" ]
   depends_on = [ec_deployment.elastic_deployment]
@@ -182,10 +184,11 @@ data "external" "elastic_index_template" {
     elastic_username  = ec_deployment.elastic_deployment.elasticsearch_username
     elastic_password  = ec_deployment.elastic_deployment.elasticsearch_password
     elastic_template_name = "logs-log.python"
+    elastic_index_name = "logs-python-default"
     elastic_json_body      		= templatefile("${path.module}/../json_templates/python-index-template.json",{})
   }
   program = ["sh", "${path.module}/../lib/elastic_api/es_create_index_template.sh" ]
-  depends_on = [ec_deployment.elastic_deployment]
+  depends_on = [ec_deployment.elastic_deployment, data.external.elastic_add_python_integration]
 }
 
 # -------------------------------------------------------------

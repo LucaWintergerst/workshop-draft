@@ -3,7 +3,7 @@
 # -------------------------------------------------------------
 variable "elastic_version" {
   type = string
-  default = "latest"
+  default = "8.5.3"
 }
 
 variable "elastic_region" {
