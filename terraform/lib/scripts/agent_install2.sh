@@ -12,7 +12,7 @@ export PASSWORD=${elasticsearch_password}
 export KIBANA_URL=${kibana_endpoint}
 export APM_SERVER_URL=${integration_server_endpoint}
 integration_server_endpoint=${integration_server_endpoint}
-export FLEET_URL=$${integration_server_endpoint//apm/fleet}
+export FLEET_URL=${fleet_server_endpoint}
 export HOST_POLICY_ID=${policy_id}
 
 

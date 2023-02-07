@@ -11,6 +11,7 @@ data "template_file" "install_agent" {
     elasticsearch_password = ec_deployment.elastic_deployment.elasticsearch_password
     kibana_endpoint = ec_deployment.elastic_deployment.kibana[0].https_endpoint
     integration_server_endpoint = ec_deployment.elastic_deployment.integrations_server[0].https_endpoint
+    fleet_server_endpoint = ec_deployment.elastic_deployment.integrations_server[0].fleet_https_endpoint
     aws_access_key_id = var.aws_access_key
     aws_secret_access_key = var.aws_secret_key
     apm_secret_token = ec_deployment.elastic_deployment.apm_secret_token
@@ -28,6 +29,7 @@ data "template_file" "install_agent2" {
     elasticsearch_password = ec_deployment.elastic_deployment.elasticsearch_password
     kibana_endpoint = ec_deployment.elastic_deployment.kibana[0].https_endpoint
     integration_server_endpoint = ec_deployment.elastic_deployment.integrations_server[0].https_endpoint
+    fleet_server_endpoint = ec_deployment.elastic_deployment.integrations_server[0].fleet_https_endpoint
     aws_access_key_id = var.aws_access_key
     aws_secret_access_key = var.aws_secret_key
     apm_secret_token = ec_deployment.elastic_deployment.apm_secret_token

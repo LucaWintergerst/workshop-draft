@@ -2,6 +2,7 @@
 # Get all Log Groups
 # -------------------------------------------------------------
 
+# TODO: Only load necessary log groups
 data "aws_cloudwatch_log_groups" "all" {
     depends_on = [
       aws_cloudwatch_log_group.sample-lambda-logs
