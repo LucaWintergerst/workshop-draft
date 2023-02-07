@@ -15,6 +15,30 @@
         "managed": true
       },
       "properties": {
+        "log": {
+          "type": "object",
+          "properties": {
+            "file": {
+              "type": "object",
+              "properties": {
+                "path": {
+                  "type": "keyword"
+                }
+              }
+            },
+            "offset": {
+              "coerce": true,
+              "index": true,
+              "ignore_malformed": false,
+              "store": false,
+              "type": "long",
+              "doc_values": true
+            },
+            "level": {
+              "type": "keyword"
+            }
+          }
+        },
         "client.ip": {
           "type": "ip"
         }

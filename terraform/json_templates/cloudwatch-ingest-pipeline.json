@@ -16,13 +16,16 @@
       "set": {
         "field": "log.level",
         "ignore_empty_value": true,
+        "ignore_failure": true,
         "copy_from": "parsed.log.level"
       }
     },
     {
       "set": {
         "field": "message",
-        "value": "parsed.message"
+        "ignore_empty_value": true,
+        "ignore_failure": true,
+        "copy_from": "parsed.message"
       }
     }
   ],
